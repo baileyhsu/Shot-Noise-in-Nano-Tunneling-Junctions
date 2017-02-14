@@ -1,0 +1,77 @@
+#!/bin/bash
+#################################################################
+##  Sample PBS Submission Script                               ##
+##  You may edit/delete lines as necessary                     ##
+##  You may also modify the shell used above (/bin/bash)       ##
+##                                                             ##
+##  For more information about other PBS resources to set      ##
+##  please type "man pbs_resources" at the command prompt.     ##
+#################################################################
+
+# The name of the job in the queue ("testjob" in this example)
+# This is optional and defaults to the script name.
+#PBS -N BZ_SX
+
+# Request 8 processors on 4 nodes.
+# The 4:ppn=2 requests 4 nodes with 2 processors/node.
+# "p4" is an attribute and is also case sensitve so an uppercase
+# version won't work!  For more attributes type 'pbsnodes -l' for
+# a list by node. Currently we have no attribues defined.
+###PBS -q joinet
+###PBS -q aradell
+###PBS -q super
+###PBS -q araqueue
+###PBS -q superara
+###PBS -q quad
+#PBS -q c6core
+###PBS -q dual
+#PBS -m ae
+#PBS -l nodes=1:ppn=9
+
+# Request that regular output and terminal output go to the same file
+# By default all output goes to a file with the same name as the 
+# PBS script with the extension .o#### where #### is the PBS job number.
+# This file is created in the SAME directory the job was submitted from.
+#PBS -e err.s1
+#PBS -o log.s1
+
+# Print the name of the node on which this script has started and the time.
+echo "================================================="
+echo "Starting on `hostname` at `date`"
+
+# The environment variable $PBS_NODEFILE lists the name of a file containe
+# a list of the nodes that are available to this job.
+# The mpirun command will use $PBS_NODEFILE for its machinefile.
+# See the mpirun man page for details.
+if [ -n "$PBS_NODEFILE" ]; then
+    if [ -f $PBS_NODEFILE ]; then
+        # print the nodenames.
+        echo
+        echo "Nodes used for this job:"
+        echo "------------------------"
+        cat ${PBS_NODEFILE}
+        echo "------------------------"
+        # Count the number of lines in $PBS_NODEFILE so that we can get the
+        # number of available processors.  Put this in the $NP variable.
+        # Unfortunately, PBS doesn't give us this information automagically.
+        NPROCS=`wc -l < $PBS_NODEFILE`
+    fi
+fi
+
+# Display this job's working directory
+echo Working directory is $PBS_O_WORKDIR
+cd $PBS_O_WORKDIR
+
+# Use mpirun to run MPI program.
+# /opt/mpich/gnu is the MPICH compiled with GCC version, and mpirun is
+# the launch script.  If your MPI program is compiled with Intel compiler,
+# you can specifies /opt/mpich/intel/bin/mpirun.  if your MPI program is
+# compiled with PGI compiler, you can specifies /opt/mpich/pgi/bin/mpirun.
+# /opt/mpich/pgi32/bin/mpirun -v -machinefile $PBS_NODEFILE -np $NPROCS  ./transport.s1.exe
+#/opt/mpich/pgi32/bin/mpiexec ./transport.ad_1024 
+/opt/pgi/linux86-64/2015/mpi/mpich/bin/mpirun -machinefile $PBS_NODEFILE -np $NPROCS  ./shot_bch2k
+
+# print end time
+echo
+echo "Job Ended at `date`"
+echo "================================="

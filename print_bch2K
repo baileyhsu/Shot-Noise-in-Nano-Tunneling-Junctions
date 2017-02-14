@@ -1,0 +1,25 @@
+ Assigning           110  to             6
+ Assigning           109  to             7
+ Assigning           108  to             8
+ Assigning           107  to             1
+ Assigning           106  to             2
+ Assigning           105  to             3
+ Assigning           104  to             4
+ Assigning           103  to             5
+ Stopping             2  * left:            7
+ Stopping             1  * left:            6
+ Stopping             4  * left:            5
+ Stopping             3  * left:            4
+ Stopping             7  * left:            3
+ Stopping             5  * left:            2
+ Stopping             6  * left:            1
+ Stopping             8  * left:            0
+ NODE  0 NIE= 0  IE=
+ NODE  1 NIE= 1  IE=107
+ NODE  2 NIE= 1  IE=106
+ NODE  3 NIE= 1  IE=105
+ NODE  4 NIE= 1  IE=104
+ NODE  5 NIE= 1  IE=103
+ NODE  6 NIE= 1  IE=110
+ NODE  7 NIE= 1  IE=109
+ NODE  8 NIE= 1  IE=108
